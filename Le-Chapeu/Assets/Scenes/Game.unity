@@ -1823,6 +1823,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a6957d618fadb4284745e2f5b1df28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerContainers:
+  - obj: {fileID: 1283648294}
+    nameText: {fileID: 807170945}
+    hatTimeSlider: {fileID: 20713866}
+  - obj: {fileID: 212060353}
+    nameText: {fileID: 1292343259}
+    hatTimeSlider: {fileID: 1097508540}
+  - obj: {fileID: 727549945}
+    nameText: {fileID: 346525608}
+    hatTimeSlider: {fileID: 1069959805}
+  - obj: {fileID: 1540219874}
+    nameText: {fileID: 336424290}
+    hatTimeSlider: {fileID: 1242385269}
+  winText: {fileID: 1743112705}
 --- !u!1 &1281451469
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,23 @@ public class GameUI : MonoBehaviour
     public PlayerUIContainer[] playerContainers;
     public TextMeshProUGUI winText;
 
+    //instance
+    public static GameUI instance;
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        InitializePlayerUI();
+    }
+
+    void Update()
+    {
+        UpdatePlayerUI();
+    }
+
     void InitializePlayerUI()
     {
         //loop through all containers
@@ -21,9 +38,32 @@ public class GameUI : MonoBehaviour
             // only enable an modify the UI containers we need
             if(x < PhotonNetwork.PlayerList.Length)
             {
-
+                container.obj.SetActive(true);
+                container.nameText.text = PhotonNetwork.PlayerList[x].NickName;
+                container.hatTimeSlider.maxValue = GameManager.instance.timeToWin;
+            } else
+            {
+                container.obj.SetActive(false);
             }
         }
+    }
+
+    void UpdatePlayerUI()
+    {
+        //loop through all players
+        for (int x = 0; x < GameManager.instance.players.Length; ++x)
+        {
+            if (GameManager.instance.players[x] != null)
+            {
+                playerContainers[x].hatTimeSlider.value = GameManager.instance.players[x].curHatTime;
+            }
+        }
+    }
+
+    public void SetWinText(string winnerName)
+    {
+        winText.gameObject.SetActive(true);
+        winText.text = winnerName + " wins!";
     }
 }
 
