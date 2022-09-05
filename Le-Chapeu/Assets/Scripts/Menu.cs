@@ -32,7 +32,7 @@ public class Menu : MonoBehaviourPunCallbacks
         joinRoomButton.interactable = true;
     }
 
-    void SetScreen (GameObject screen)
+    void SetScreen(GameObject screen)
     {
         //Deactivate all screens
         mainScreen.SetActive(false);
@@ -42,8 +42,62 @@ public class Menu : MonoBehaviourPunCallbacks
         screen.SetActive(true);
     }
 
-    public void OnCreateRoomButton(TMP_Input roomNameInput)
+    public void OnCreateRoomButton(TMP_InputField roomNameInput)
     {
         NetworkManager.instance.CreateRoom(roomNameInput.text);
+    }
+
+    public void OnJoinRoomButton (TMP_InputField roomNameInput)
+    {
+        NetworkManager.instance.JoinRoom(roomNameInput.text);
+    }
+
+    public void OnPlayerNameUpdate (TMP_InputField playerNameInput)
+    {
+        PhotonNetwork.NickName = playerNameInput.text;
+    }
+
+    public override void OnJoinedRoom()
+    {
+        SetScreen(lobbyScreen);
+
+        photonView.RPC("UpdateLobbyUI", RpcTarget.All);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdateLobbyUI();
+    }
+
+    [PunRPC]
+    public void UpdateLobbyUI()
+    {
+        playerListText.text = "";
+
+        //display all players currently in the lobby
+        foreach(Player player in PhotonNetwork.PlayerList)
+        {
+            playerListText.text += player.NickName + "\n";
+        }
+
+        // only the host can start the game
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startGameButton.interactable = true;
+        } else
+        {
+            startGameButton.interactable = false;
+        }
+    }
+
+    public void OnLeaveLobbyButton()
+    {
+        PhotonNetwork.LeaveRoom();
+        SetScreen(mainScreen);
+    }
+
+    public void OnStartGameButton()
+    {
+        NetworkManager.instance.photonView.RPC("ChangeScene", RpcTarget.All, "Game");
     }
 }
