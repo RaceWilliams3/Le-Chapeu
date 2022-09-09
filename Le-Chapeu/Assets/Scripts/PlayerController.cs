@@ -74,10 +74,37 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     void Move()
     {
+        int xdir = Mathf.RoundToInt(Input.GetAxis("Horizontal"));
+        int zdir = Mathf.RoundToInt(Input.GetAxis("Vertical"));
+
         float x = Input.GetAxis("Horizontal") * moveSpeed;
         float z = Input.GetAxis("Vertical") * moveSpeed;
 
+        if (x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0 - (zdir * 45), 0);
+        }
+        else if (x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180 + (zdir * 45), 0);
+        }
+        else
+        {
+            if (z > 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 270 - (xdir * 45), 0);
+            }
+            else if (z < 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 90 + (xdir * 45), 0);
+            }
+        }
+
         rig.velocity = new Vector3(x, rig.velocity.y, z);
+
+
+
+
     }
 
     void TryJump()
