@@ -31,10 +31,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         GameManager.instance.players[id - 1] = this;
 
         // give the first player the hat
-        if(id == 1)
+        /*if(id == 1)
         {
             GameManager.instance.GiveHat(id, true);
-        }
+        } */
 
         if (!photonView.IsMine)
         {
@@ -139,6 +139,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
                     //give us the hat
                     GameManager.instance.photonView.RPC("GiveHat", RpcTarget.All, id, false);
                 }
+            }
+        } 
+        else if (collision.gameObject.CompareTag("Hat"))
+        {
+            Debug.Log("Touched hat");
+            if (GameManager.instance.CanGetHat())
+            {
+                //give us the hat
+                GameManager.instance.photonView.RPC("GiveHat", RpcTarget.All, id, false);
             }
         }
 
